@@ -11,6 +11,7 @@ import time
 from functools import wraps
 from .wwlog import logger
 
+
 def timeit(msg = None, unit = "ms"):
     """Timer Decorator
 

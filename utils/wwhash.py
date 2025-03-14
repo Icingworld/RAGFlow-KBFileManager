@@ -10,6 +10,7 @@ Version: 0.1.0
 import hashlib
 from .wwtime import timeit
 
+
 @timeit("calculate_file_hash_content_binary used", "ms")
 def calculate_file_hash_content_binary(content: bytes, algorithm: str = "sha256", chunk_size: int = 4096) -> str:
     """Calculate the hash value of binary content.

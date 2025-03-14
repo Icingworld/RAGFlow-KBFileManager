@@ -11,6 +11,7 @@ Version: 0.1.0
 import sqlite3
 from typing import Any, List, Tuple, Optional
 
+
 class SQLiteDB:
     def __init__(self, db_path: str = "default.db"):
         self.db_path = db_path
@@ -90,16 +91,29 @@ class SQLiteDB:
         """
         query = f"DELETE FROM {table} WHERE {condition}"
         self.execute(query, params)
+
+    def connect(self) -> None:
+        """Connect to database if not connected
+
+        :return: None
+        """
+        if not self.conn:
+            self.conn = sqlite3.connect(self.db_path)
+            self.cursor = self.conn.cursor()
     
-    def close(self) -> None:
-        """Close database connection
+    def disconnect(self) -> None:
+        """Close database connection if connected
         
         :return: None
         """
-        self.conn.close()
+        if self.conn:
+            self.cursor.close()
+            self.conn.close()
+            self.cursor = None
+            self.conn = None
     
     def __enter__(self) -> "SQLiteDB":
         return self
 
     def __exit__(self, exc_type, exc_value, traceback) -> None:
-        self.close()
+        self.disconnect()
