@@ -26,12 +26,12 @@ def timeit(msg = None, unit = "ms"):
             elapsed = time.time() - start_time
             
             time_unit = {
-                "ms": f"{elapsed * 1000:.2f} 毫秒",
-                "s": f"{elapsed:.2f} 秒",
-                "m": f"{elapsed / 60:.2f} 分钟"
+                "ms": f"{elapsed * 1000:.2f} milliseconds",
+                "s": f"{elapsed:.2f} seconds",
+                "m": f"{elapsed / 60:.2f} minutes"
             }[unit]
             
-            display_msg = msg or f"函数 {func.__name__} 运行耗时"
+            display_msg = msg or f"[{func.__name__}] uses"
             logger.info(f"{display_msg}: {time_unit}")
             return result
         return wrapper
