@@ -9,13 +9,13 @@ Version: 0.1.0
 
 import time
 from functools import wraps
-from wwlog import logger
+from .wwlog import logger
 
 def timeit(msg = None, unit = "ms"):
     """Timer Decorator
 
     :param msg: customized output message, default is function name
-    :param unit: time unit (ms = millisecond，s = second，m = minute)
+    :param unit: time unit (ms = millisecond, s = second, m = minute)
     """
     def decorator(func):
         @wraps(func)
@@ -30,8 +30,8 @@ def timeit(msg = None, unit = "ms"):
                 "m": f"{elapsed / 60:.2f} minutes"
             }[unit]
             
-            display_msg = msg or f"[{func.__name__}] uses"
-            logger.info(f"{display_msg}: {time_unit}")
+            display_msg = msg or f"[{func.__name__}] used"
+            logger.info(f"{display_msg} {time_unit}")
             return result
         return wrapper
     return decorator
