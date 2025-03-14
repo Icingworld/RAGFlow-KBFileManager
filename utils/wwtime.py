@@ -12,8 +12,7 @@ from functools import wraps
 from wwlog import logger
 
 def timeit(msg = None, unit = "ms"):
-    """
-    Timer Decorator
+    """Timer Decorator
 
     :param msg: customized output message, default is function name
     :param unit: time unit (ms = millisecond，s = second，m = minute)
