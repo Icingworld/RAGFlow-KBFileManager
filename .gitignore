@@ -1,0 +1,5 @@
+# personal config file
+config.py
+
+# python cache directory
+**/__pycache__/
