@@ -10,14 +10,17 @@ Version: 0.1.0
 import time
 from typing import List
 from filesystem.wwfilesystem import FileSystem
+from api.wwapi import WebApi
 
 
 class Manager:
+    """Manager of RAGFlow knowledge base files.
+    """
     def __init__(self, root_path: str, suffixes: List[str], period: int = 1):
         self.file_system = FileSystem(root_path, suffixes)
         self.period = period
         
-    def run(self):
+    def run(self) -> None:
         while True:
             # connect to file system
             self.file_system.connect()

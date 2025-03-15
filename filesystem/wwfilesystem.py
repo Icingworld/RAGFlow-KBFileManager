@@ -16,6 +16,8 @@ from utils.wwlog import logger
 
 
 class FileSystem:
+    """A manager to maintain root file system.
+    """
     def __init__(self, root_dir: str, suffix: List[str]):
         self.root_dir = root_dir
         self.suffix = suffix
