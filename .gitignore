@@ -3,3 +3,6 @@ config.py
 
 # python cache directory
 **/__pycache__/
+
+# db file
+default.db

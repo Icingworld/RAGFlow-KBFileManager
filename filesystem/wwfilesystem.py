@@ -19,6 +19,8 @@ class FileSystem:
         self.root_dir = root_dir
         self.suffix = suffix
         self.db = SQLiteDB()
+
+        self.removed_files = []
         
     def check_db(self) -> None:
         """Check database and initialize it if not initialized.
@@ -50,7 +52,7 @@ class FileSystem:
             if not os.path.exists(file_path):
                 logger.debug(f"File {file_path} not found, deleting from database.")
                 self.db.delete("ragflow", "path =?", (file_path,))
-                # there are something to do
+                self.removed_files.append(file_path)
         logger.debug("Scanning completed.")
 
     def scan_files(self) -> None:
@@ -90,3 +92,42 @@ class FileSystem:
                                    (file_path, base_name, file_extension, hash_value, int(time.time())))
 
         logger.debug("Scanning completed.")
+
+    def update_files(self) -> None:
+        """Update files in the database.
+
+        :return: None
+        """
+        self.scan_database()
+        self.scan_files()
+
+    def get_removed_files(self) -> list[str]:
+        """Get removed files.
+
+        :return: list of removed files
+        """
+        return self.removed_files
+
+    def clear_removed_files(self) -> None:
+        """Clear removed files.
+
+        :return: None
+        """
+        self.removed_files.clear()
+
+    def get_unuploaded_files(self) -> list[str]:
+        """Get unuploaded files.
+
+        :return: list of unuploaded files
+        """
+        return [row[0] for row in self.db.fetch_all("SELECT path FROM ragflow WHERE status = 0")]
+
+    def set_file_status(self, file_path: str, status: int) -> None:
+        """Set file status.
+
+        :param file_path: file path
+        :param status: file status. 
+         0 = unuploaded, 1 = uploaded but not processed, 2 = uploaded and processing, 3 = uploaded and processed
+        :return: None
+        """
+        self.db.update("ragflow", "status =?", "path =?", (status, file_path))
