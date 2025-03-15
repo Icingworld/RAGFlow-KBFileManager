@@ -9,13 +9,14 @@ Version: 0.1.0
 
 import os
 import time
+from typing import List
 from utils.wwhash import calculate_file_hash
 from utils.wwsqlite import SQLiteDB
 from utils.wwlog import logger
 
 
 class FileSystem:
-    def __init__(self, root_dir: str, suffix: list[str]):
+    def __init__(self, root_dir: str, suffix: List[str]):
         self.root_dir = root_dir
         self.suffix = suffix
         self.db = SQLiteDB()
@@ -84,7 +85,7 @@ class FileSystem:
                     else:
                         # file was changed, update file status to 0(default)
                         logger.debug(f"File {file_path} changed.")
-                        self.db.update("ragflow", f"hash = ?, modified_time = ?", "path = ?", (hash_value, int(time.time()), file_path))
+                        self.db.update("ragflow", f"hash = ?, modified_time = ?, status = ?", "path = ?", (hash_value, int(time.time()), 1, file_path))
                 else:
                     # file not in the database, insert it
                     base_name = os.path.basename(file_path)
@@ -115,19 +116,33 @@ class FileSystem:
         """
         self.removed_files.clear()
 
-    def get_unuploaded_files(self) -> list[str]:
-        """Get unuploaded files.
+    def get_new_files(self) -> list[str]:
+        """Get new files.
 
-        :return: list of unuploaded files
+        :return: list of new files
         """
         return [row[0] for row in self.db.fetch_all("SELECT path FROM ragflow WHERE status = 0")]
+        
+    def get_updated_files(self) -> list[str]:
+        """Get updated files.
+
+        :return: list of updated files
+        """
+        return [row[0] for row in self.db.fetch_all("SELECT path FROM ragflow WHERE status = 1")]
+
+    def get_unprocessed_files(self) -> list[str]:
+        """Get unprocessed files.
+
+        :return: list of unprocessed files
+        """
+        return [row[0] for row in self.db.fetch_all("SELECT path FROM ragflow WHERE status = 2")]
 
     def set_file_status(self, file_path: str, status: int) -> None:
         """Set file status.
 
         :param file_path: file path
         :param status: file status. 
-         0 = unuploaded, 1 = uploaded but not processed, 2 = uploaded and processing, 3 = uploaded and processed
+         0 = unuploaded and new, 1 = unuploaded but update, 2 = uploaded but not processed, 3 = uploaded and processing, 4 = uploaded and processed
         :return: None
         """
         self.db.update("ragflow", "status =?", "path =?", (status, file_path))

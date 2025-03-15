@@ -27,10 +27,3 @@ RAGFLOW_KNOWLEDGE_BASE_NAME = ""  # knowledge base name
 RAGFLOW_PARSER = ""  # parser name, including "General", "Manual", "Paper", etc.
 RAGFLOW_AUTHORIZATION = ""  # authorization string
 RAGFLOW_KNOWLEDGE_BASE_ID = ""  # knowledge base id
-
-# sqlite3 config
-SQLITE_HOST = ""  # sqlite3 host
-SQLITE_PORT = ""  # sqlite3 port
-SQLITE_USER = 0  # sqlite3 user
-SQLITE_PASSWORD = ""  # sqlite3 password
-SQLITE_DATABASE = ""  # sqlite3 database name
