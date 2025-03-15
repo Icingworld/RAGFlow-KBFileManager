@@ -146,3 +146,17 @@ class FileSystem:
         :return: None
         """
         self.db.update("ragflow", "status =?", "path =?", (status, file_path))
+
+    def connect(self) -> None:
+        """Connect to the database.
+
+        :return: None
+        """
+        self.db.connect()
+
+    def disconnect(self) -> None:
+        """Close the database.
+
+        :return: None
+        """
+        self.db.disconnect()
