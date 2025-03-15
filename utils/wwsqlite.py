@@ -10,6 +10,7 @@ Version: 0.1.0
 
 import sqlite3
 from typing import Any, List, Tuple, Optional
+from .wwlog import logger
 
 
 class SQLiteDB:
@@ -19,7 +20,7 @@ class SQLiteDB:
         self.cursor = self.conn.cursor()
 
     def execute(self, query: str, params: Tuple = ()) -> None:
-        """execute sql query
+        """execute sql query.
         
         :param query: sql query
         :param params: sql query params
@@ -29,7 +30,7 @@ class SQLiteDB:
         self.conn.commit()
 
     def fetch_one(self, query: str, params: Tuple = ()) -> Optional[Tuple]:
-        """Fetch single record from database
+        """Fetch single record from database.
 
         :param query: SQL query
         :param params: SQL query parameters
@@ -39,7 +40,7 @@ class SQLiteDB:
         return self.cursor.fetchone()
     
     def fetch_all(self, query: str, params: Tuple = ()) -> List[Tuple]:
-        """Fetch all records from database
+        """Fetch all records from database.
 
         :param query: SQL query
         :param params: SQL query parameters
@@ -49,7 +50,7 @@ class SQLiteDB:
         return self.cursor.fetchall()
 
     def create_table(self, table_name: str, columns: str) -> None:
-        """Create a table
+        """Create a table.
         
         :param table_name: table name
         :param columns: table columns
@@ -58,7 +59,7 @@ class SQLiteDB:
         self.execute(query)
     
     def insert(self, table: str, columns: str, values: Tuple) -> None:
-        """Insert data into database
+        """Insert data into database.
         
         :param table: table name
         :param columns: table columns
@@ -70,7 +71,7 @@ class SQLiteDB:
         self.execute(query, values)
     
     def update(self, table: str, set_clause: str, condition: str, params: Tuple) -> None:
-        """Update data in database
+        """Update data in database.
 
         :param table: table name
         :param set_clause: update clause
@@ -82,7 +83,7 @@ class SQLiteDB:
         self.execute(query, params)
     
     def delete(self, table: str, condition: str, params: Tuple) -> None:
-        """Delete data from database
+        """Delete data from database.
 
         :param table: table name
         :param condition: delete condition
@@ -93,7 +94,7 @@ class SQLiteDB:
         self.execute(query, params)
 
     def connect(self) -> None:
-        """Connect to database if not connected
+        """Connect to database if not connected.
 
         :return: None
         """
@@ -102,7 +103,7 @@ class SQLiteDB:
             self.cursor = self.conn.cursor()
     
     def disconnect(self) -> None:
-        """Close database connection if connected
+        """Close database connection if connected.
         
         :return: None
         """

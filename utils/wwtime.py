@@ -13,7 +13,7 @@ from .wwlog import logger
 
 
 def timeit(msg = None, unit = "ms"):
-    """Timer Decorator
+    """Timer Decorator.
 
     :param msg: customized output message, default is function name
     :param unit: time unit (ms = millisecond, s = second, m = minute)
@@ -32,7 +32,7 @@ def timeit(msg = None, unit = "ms"):
             }[unit]
             
             display_msg = msg or f"[{func.__name__}] used"
-            logger.info(f"{display_msg} {time_unit}")
+            logger.debug(f"{display_msg} {time_unit}")
             return result
         return wrapper
     return decorator
