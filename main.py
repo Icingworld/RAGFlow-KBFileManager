@@ -6,7 +6,8 @@ if __name__ == "__main__":
         FILE_SYSTEM_ROOT,
         FILE_SYSTEM_SUFFIX,
         RAGFLOW_URL,
-        RAGFLOW_AUTHORIZATION,
+        RAGFLOW_EMAIL,
+        RAGFOW_PASSWORD,
         RAGFLOW_KNOWLEDGE_BASE_ID
     )
     manager.run()

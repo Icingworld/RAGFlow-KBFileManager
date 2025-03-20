@@ -58,8 +58,9 @@ class FileSystem:
                 self.db.delete("ragflow", "path =?", (path,))
                 if not doc_id:
                     # it won't happen, maybe
-                    logger.error(f"File {path} has no doc_id, failed to delete it.")
+                    logger.critical(f"File {path} has no doc_id, failed to delete it.")
                     continue
+                logger.debug(f"Deleting file status {status}.")
                 if status not in (0, 1):
                     logger.debug(f"File {path} not found, deleting from web.")
                     removed_files.append(doc_id)
@@ -81,23 +82,27 @@ class FileSystem:
             for filename in filenames:
                 file_extension = os.path.splitext(filename)[1]
                 if file_extension not in self.suffix:
-                    logger.debug(f"File {file_path} has unsupported extension, skipping.")
+                    logger.debug(f"File {filename} has unsupported extension {file_extension}, skipping.")
                     continue
 
                 file_path = os.path.join(dir_path, filename)
                 hash_value = calculate_file_hash(file_path)
 
                 # search file_path in the database
-                if ret := self.db.fetch_one("SELECT hash FROM ragflow WHERE path = ?", (file_path,)):
+                if ret := self.db.fetch_one("SELECT hash, status FROM ragflow WHERE path = ?", (file_path,)):
                     # file already in the database
                     if hash_value == ret[0]:
                         # no need to update
                         logger.debug(f"File {file_path} already up-to-date.")
                         continue
                     else:
-                        # file was changed, update file status to 1
-                        logger.debug(f"File {file_path} changed.")
-                        self.db.update("ragflow", f"hash = ?, status = ?", "path = ?", (hash_value, 1, file_path))
+                        # file was changed, update file status to 2
+                        if ret[1] == 1:  # if old file not upload, nothing needs to do
+                            # this may not happen
+                            logger.debug(f"File {file_path} changed, but staged only.")
+                        else:
+                            logger.debug(f"File {file_path} changed, updating.")
+                            self.db.update("ragflow", f"hash = ?, status = ?", "path = ?", (hash_value, 2, file_path))
                 else:
                     # file not in the database, insert it
                     relative_path = os.path.relpath(dir_path, self.root_dir)
@@ -135,7 +140,7 @@ class FileSystem:
 
         :return: list of unprocessed files
         """
-        return [row[0] for row in self.db.fetch_all("SELECT path FROM ragflow WHERE status = 2")]
+        return [row[0] for row in self.db.fetch_all("SELECT path FROM ragflow WHERE status = 3")]
 
     def set_file_id(self, file_path: str, file_id: str) -> None:
         """Set file id.

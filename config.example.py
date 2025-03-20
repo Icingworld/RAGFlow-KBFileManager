@@ -23,6 +23,8 @@ MANAGER_PARSE_STRATEGY = ""  # parse strategy
 
 # RAGFlow config
 RAGFLOW_URL = ""  # base url of ragflow
+RAGFLOW_EMAIL = ""  # email address
+RAGFOW_PASSWORD = ""  # password
 RAGFLOW_KNOWLEDGE_BASE_NAME = ""  # knowledge base name
 RAGFLOW_PARSER = ""  # parser name, including "General", "Manual", "Paper", etc.
 RAGFLOW_AUTHORIZATION = ""  # authorization string
